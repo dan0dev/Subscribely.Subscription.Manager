@@ -15,7 +15,6 @@ import { toast } from "sonner";
 
 type FormType = "sign-in" | "sign-up";
 
-// Define a type that includes all possible fields
 interface AuthFormValues {
   name?: string;
   email: string;

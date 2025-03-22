@@ -9,7 +9,7 @@ const monaSans = Mona_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Sub Manager",
+  title: "SubTrackr",
   description: "Subscription Manager",
 };
 
