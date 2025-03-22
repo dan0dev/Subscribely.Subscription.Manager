@@ -55,14 +55,27 @@ const AuthForm = ({ type }: { type: FormType }) => {
   });
 
   // 2. Define a submit handler.
-  async function onSubmit() {
+  async function onSubmit(values: AuthFormValues) {
     setIsLoading(true);
     setError(null);
 
     try {
-      // Here you would typically make an API call
-      // Simulating API call with a timeout
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const endpoint =
+        type === "sign-up" ? "/api/auth/register" : "/api/auth/login";
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Authentication failed");
+      }
 
       if (type === "sign-up") {
         toast.success("Account created successfully. Please sign in.");
@@ -88,7 +101,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
     <div className="card-border lg:min-w-[566px]">
       <div className="flex flex-col gap-6 card py-14 px-10">
         <div className="flex flex-row gap-2 justify-center">
-          <Image src="/logo.svg" alt="logo" height={32} width={38} />
+          <Image src="logo.svg" alt="logo" height={32} width={38} />
           <h2 className="text-primary-100">Sub Manager</h2>
         </div>
         <h3 className="lg:text-center">

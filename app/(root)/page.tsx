@@ -10,7 +10,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { X } from "lucide-react";
-import { type FC, useState } from "react";
+import { type FC, useEffect, useState } from "react";
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
 
 interface Subscription {
   id: string;
@@ -20,6 +26,10 @@ interface Subscription {
 }
 
 const SubscriptionTracker: FC = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([
     {
       id: "sub_netflix",
@@ -29,8 +39,30 @@ const SubscriptionTracker: FC = () => {
     },
   ]);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("/api/user/me");
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to fetch user data");
+        }
+
+        setUser(data.user);
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+        setError(err instanceof Error ? err.message : "Unknown error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const formatDate = (date: Date): string => {
-    return date.toLocaleDateString("en-US", {
+    return new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -50,7 +82,11 @@ const SubscriptionTracker: FC = () => {
               Subscription Tracker
             </h2>
             <span className="text-light-100 text-sm font-medium">
-              dev@dev.dev
+              {loading
+                ? "Loading..."
+                : error
+                ? "Error loading user"
+                : user?.email}
             </span>
           </div>
           <div className="flex">
@@ -80,7 +116,7 @@ const SubscriptionTracker: FC = () => {
                       className="border-light-600/20 hover:bg-dark-300/50 animate-fadeIn"
                     >
                       <TableCell className="font-medium text-light-400">
-                        {index}
+                        {index + 1}
                       </TableCell>
                       <TableCell className="font-medium text-white">
                         {subscription.name}
