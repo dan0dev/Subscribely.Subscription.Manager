@@ -6,7 +6,7 @@ import { Input } from "./ui/input";
 interface FormFieldProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
-  label: string;
+  label: string | React.ReactNode;
   placeholder?: string;
   type?: "text" | "email" | "password" | "file";
   description?: string;
@@ -34,11 +34,9 @@ const FormField = <T extends FieldValues>({
               type={type}
               {...field}
               disabled={disabled}
-              className={cn(
-                "placeholder:text-gray-400/50", // Lighter placeholder color
-                error && "border-red-500 focus-visible:ring-red-500"
-              )}
+              className={cn("placeholder:text-gray-400/50", error && "border-red-500 focus-visible:ring-red-500")}
               aria-invalid={!!error}
+              suppressHydrationWarning
             />
           </FormControl>
 
