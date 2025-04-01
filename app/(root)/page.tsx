@@ -1,55 +1,46 @@
 "use client";
 
 import Sidebar from "@/components/Sidebar";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { X } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { type FC, useEffect, useState } from "react";
+
+// Import the tab components
+import AllSubscriptionsTab from "./tabs/AllSubscriptionsTab";
+import ManagementTab from "./tabs/ManagementTab";
+import SettingsTab from "./tabs/SettingsTab";
+import SubscriptionStoreTab from "./tabs/SubscriptionStoreTab";
+import SubscriptionTab from "./tabs/SubscriptionTab";
 
 interface User {
   id: string;
   name: string;
   email: string;
-}
-
-interface Subscription {
-  id: string;
-  name: string;
-  price: number;
-  renewalDate: Date;
+  accountMoney: number;
+  role?: string;
 }
 
 const SubscriptionTracker: FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([
-    {
-      id: "sub_netflix",
-      name: "Netflix Premium",
-      price: 19.99,
-      renewalDate: new Date("2025-03-30"),
-    },
-  ]);
+  const [activeTab, setActiveTab] = useState<string>("subscriptions");
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await fetch("/api/user/me");
-        const data = await response.json();
 
         if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
           throw new Error(data.message || "Failed to fetch user data");
         }
 
-        setUser(data.user);
+        setUser(data.user as User);
       } catch (err) {
         console.error("Error fetching user data:", err);
         setError(err instanceof Error ? err.message : "Unknown error occurred");
@@ -61,106 +52,124 @@ const SubscriptionTracker: FC = () => {
     fetchUserData();
   }, []);
 
-  const formatDate = (date: Date): string => {
-    return new Date(date).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
+  // Handle tab changes
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
   };
 
-  const handleRemove = (id: string): void => {
-    setSubscriptions(subscriptions.filter((sub) => sub.id !== id));
+  // Add signOut handler
+  const handleSignOut = async () => {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        // Redirect to home/login page
+        window.location.href = "/";
+      } else {
+        console.error("Failed to sign out");
+      }
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
+  // Render active tab content
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "subscriptions":
+        return <SubscriptionTab />;
+      case "subscription-store":
+        return <SubscriptionStoreTab />;
+      case "management":
+        return <ManagementTab />;
+      case "all-subscriptions":
+        return <AllSubscriptionsTab />;
+      case "settings":
+        return <SettingsTab />;
+      default:
+        return <SubscriptionTab />;
+    }
   };
 
   return (
-    <div className="min-h-screen p-8 flex items-center justify-center bg-dark-500">
-      <div className="card-border w-full max-w-4xl">
-        <div className="card p-6">
-          <div className="flex justify-between items-center mb-6 border-b border-light-600/20 pb-4">
-            <h2 className="text-primary-100 text-xl font-medium">
-              Subscription Tracker
-            </h2>
-            <span className="text-light-100 text-sm font-medium">
-              {loading
-                ? "Loading..."
-                : error
-                ? "Error loading user"
-                : user?.email}
-            </span>
+    <div className="min-h-screen p-10 pb-28 md:pb-10 flex items-center justify-center bg-dark-500">
+      <div className="card-border w-full max-w-5xl lg:min-h-[600px]">
+        <div className="card p-7 lg:min-h-[600px]">
+          <div className="flex justify-between items-center mb-7 border-b border-light-600/20 pb-5">
+            <button
+              onClick={handleSignOut}
+              className="flex items-center text-light-100 text-base font-medium cursor-pointer"
+              aria-label="Sign Out"
+            >
+              <LogOut size={22} className="mr-3" />
+              <span className="text-base font-medium">Sign Out</span>
+            </button>
+            <div className="flex space-x-3">
+              <span className="text-light-100 text-base font-medium flex items-center">
+                {loading ? (
+                  "Loading..."
+                ) : error ? (
+                  "Error loading user"
+                ) : (
+                  <>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-1.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
+                    </svg>
+                    {user?.name
+                      ? (() => {
+                          return user.name.length > 10 ? `${user.name.substring(0, 10)}...` : user.name;
+                        })()
+                      : ""}
+                  </>
+                )}
+              </span>
+              <span className="text-light-100 text-base font-medium flex items-center">
+                {loading ? (
+                  "Loading..."
+                ) : error ? (
+                  "Error loading user's money"
+                ) : (
+                  <>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-1.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    $
+                    {user?.accountMoney?.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </>
+                )}
+              </span>
+            </div>
           </div>
           <div className="flex">
-            <Sidebar activePage="subscriptions" />
-
-            <div className="flex-1 overflow-x-auto ml-4">
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-light-600/20">
-                    <TableHead className="text-light-100 w-16">#</TableHead>
-                    <TableHead className="text-light-100">
-                      Subscription
-                    </TableHead>
-                    <TableHead className="text-light-100">Price</TableHead>
-                    <TableHead className="text-light-100">
-                      Renewal Date
-                    </TableHead>
-                    <TableHead className="text-center text-light-100 w-24">
-                      Action
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {subscriptions.map((subscription, index) => (
-                    <TableRow
-                      key={subscription.id}
-                      className="border-light-600/20 hover:bg-dark-300/50 animate-fadeIn"
-                    >
-                      <TableCell className="font-medium text-light-400">
-                        {index + 1}
-                      </TableCell>
-                      <TableCell className="font-medium text-white">
-                        {subscription.name}
-                      </TableCell>
-                      <TableCell className="text-light-400">
-                        ${subscription.price.toFixed(2)}/month
-                      </TableCell>
-                      <TableCell>
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            new Date(subscription.renewalDate).getTime() -
-                              new Date().getTime() <
-                            7 * 24 * 60 * 60 * 1000
-                              ? "bg-primary-100/20 text-primary-100"
-                              : "bg-primary-200/20 text-primary-200"
-                          }`}
-                        >
-                          {formatDate(subscription.renewalDate)}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <button
-                          onClick={() => handleRemove(subscription.id)}
-                          className="text-light-400 hover:text-destructive-100 transition-colors focus:outline-none focus:ring-2 focus:ring-destructive-100/40 rounded-full p-1"
-                          aria-label={`Cancel ${subscription.name} subscription`}
-                        >
-                          <X size={18} />
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                  {subscriptions.length === 0 && (
-                    <TableRow>
-                      <TableCell
-                        colSpan={5}
-                        className="text-center py-8 text-light-400"
-                      >
-                        No active subscriptions found
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
+            <Sidebar activePage={activeTab} onTabChange={handleTabChange} />
+            {renderTabContent()}
           </div>
         </div>
       </div>
