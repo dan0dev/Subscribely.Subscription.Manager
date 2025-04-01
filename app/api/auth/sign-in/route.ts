@@ -76,6 +76,18 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error) {
     console.error("Login error:", error);
+
+    // Handle timeout error
+    if (error instanceof Error && error.message.includes("timed out")) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Login request timed out. Please try again.",
+        },
+        { status: 504 }
+      );
+    }
+
     return NextResponse.json(
       {
         success: false,
