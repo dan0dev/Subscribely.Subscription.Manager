@@ -1,5 +1,6 @@
 import { jwtVerify } from "jose";
 import { NextResponse } from "next/server";
+import { JWT_SECRET } from "./config/env.ts";
 
 // Oldalak, amelyek nem igényelnek hitelesítést
 const publicPaths = ["/sign-in", "/sign-up"];
@@ -17,7 +18,7 @@ export async function middleware(request) {
   if (isPublicPath && token) {
     try {
       // Token ellenőrzése
-      await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+      await jwtVerify(token, new TextEncoder().encode(JWT_SECRET));
 
       // Átirányítás a főoldalra
       return NextResponse.redirect(new URL("/", request.url));
