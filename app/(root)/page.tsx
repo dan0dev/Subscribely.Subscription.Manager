@@ -5,19 +5,12 @@ import { LogOut } from "lucide-react";
 import { type FC, useEffect, useState } from "react";
 
 // Import the tab components
+import { User } from "@/types/types";
 import AllSubscriptionsTab from "./tabs/AllSubscriptionsTab";
 import ManagementTab from "./tabs/ManagementTab";
 import SettingsTab from "./tabs/SettingsTab";
 import SubscriptionStoreTab from "./tabs/SubscriptionStoreTab";
 import SubscriptionTab from "./tabs/SubscriptionTab";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  accountMoney: number;
-  role?: string;
-}
 
 const SubscriptionTracker: FC = () => {
   const [user, setUser] = useState<User | null>(null);
