@@ -170,6 +170,32 @@
 }
 
 @layer components {
+  /* Custom Scrollbar Styles */
+  .overflow-y-auto {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-light-600) transparent;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 4px 0;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: var(--color-light-600);
+    border-radius: 3px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-light-400);
+  }
+
   .btn-call {
     @apply inline-block px-7 py-3 font-bold text-sm leading-5 text-white transition-colors duration-150 bg-success-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-success-200 hover:bg-success-200 min-w-28 cursor-pointer items-center justify-center overflow-visible;
 
