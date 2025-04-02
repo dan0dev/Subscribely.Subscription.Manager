@@ -95,9 +95,9 @@ const Sidebar: FC<SidebarProps> = ({ activePage = "subscriptions", onTabChange }
 
   // Desktop Sidebar
   const DesktopSidebar = (
-    <div className="hidden md:flex h-full w-80 bg-dark-400 border-r border-light-600/20 flex-col">
+    <div className="hidden md:flex h-full w-80 bg-dark-400 border-r border-light-600/20 flex-col overflow-hidden">
       {/* Logo and Brand */}
-      <div className="p-7 border-b border-light-600/20">
+      <div className="p-7 border-b border-light-600/20 flex-shrink-0">
         <div className="flex items-center gap-4">
           <Image src={Logo} alt="logo" height={35} width={35} />
           <h1 className="text-xl font-semibold text-white">Subscribely</h1>
@@ -105,7 +105,7 @@ const Sidebar: FC<SidebarProps> = ({ activePage = "subscriptions", onTabChange }
       </div>
 
       {/* Navigation */}
-      <div className="flex-1 py-7 px-5 flex flex-col gap-3">
+      <div className="flex-1 py-7 px-5 flex flex-col gap-3 overflow-y-hidden">
         <SidebarItem
           icon={<CreditCard size={25} />}
           label="My Subscriptions"
@@ -149,7 +149,7 @@ const Sidebar: FC<SidebarProps> = ({ activePage = "subscriptions", onTabChange }
       </div>
 
       {/* Help Section */}
-      <div className="mt-auto p-5 border-t border-light-600/20">
+      <div className="mt-auto p-5 border-t border-light-600/20 flex-shrink-0">
         <SidebarItem icon={<HelpCircle size={25} />} label="Help & Support" disabled={true} onClick={() => {}} />
       </div>
     </div>

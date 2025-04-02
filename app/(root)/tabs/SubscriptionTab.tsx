@@ -1,15 +1,8 @@
-'use client';
+"use client";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { RefreshCcw, X } from 'lucide-react';
-import { FC, useState } from 'react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { RefreshCcw, X } from "lucide-react";
+import { FC, useState } from "react";
 
 interface Subscription {
   id: string;
@@ -21,18 +14,18 @@ interface Subscription {
 const SubscriptionTab: FC = () => {
   const [subscriptions, _setSubscriptions] = useState<Subscription[]>([
     {
-      id: 'sub_netflix',
-      name: 'Netflix Premium',
+      id: "sub_netflix",
+      name: "Netflix Premium",
       price: 19.99,
-      renewalDate: new Date('2025-03-30'),
+      renewalDate: new Date("2025-03-30"),
     },
   ]);
 
   const formatDate = (date: Date): string => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+    return new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
@@ -50,24 +43,16 @@ const SubscriptionTab: FC = () => {
         </TableHeader>
         <TableBody>
           {subscriptions.map((subscription, index) => (
-            <TableRow
-              key={subscription.id}
-              className="border-light-600/20 hover:bg-dark-300/50 animate-fadeIn"
-            >
+            <TableRow key={subscription.id} className="border-light-600/20 hover:bg-dark-300/50 animate-fadeIn">
               <TableCell className="font-medium text-light-400 text-base">{index + 1}</TableCell>
-              <TableCell className="font-medium text-white text-base">
-                {subscription.name}
-              </TableCell>
-              <TableCell className="text-light-400 text-base">
-                ${subscription.price.toFixed(2)}/month
-              </TableCell>
+              <TableCell className="font-medium text-white text-base">{subscription.name}</TableCell>
+              <TableCell className="text-light-400 text-base">${subscription.price.toFixed(2)}/month</TableCell>
               <TableCell>
                 <span
                   className={`px-4 py-1.5 rounded-full text-sm font-medium ${
-                    new Date(subscription.renewalDate).getTime() - new Date().getTime() <
-                    7 * 24 * 60 * 60 * 1000
-                      ? 'bg-primary-100/20 text-primary-100'
-                      : 'bg-primary-200/20 text-primary-200'
+                    new Date(subscription.renewalDate).getTime() - new Date().getTime() < 7 * 24 * 60 * 60 * 1000
+                      ? "bg-primary-100/20 text-primary-100"
+                      : "bg-primary-200/20 text-primary-200"
                   }`}
                 >
                   {formatDate(subscription.renewalDate)}

@@ -95,8 +95,8 @@ const SubscriptionTracker: FC = () => {
 
   return (
     <div className="min-h-screen p-10 pb-28 md:pb-10 flex items-center justify-center bg-dark-500">
-      <div className="card-border w-full max-w-5xl lg:min-h-[600px]">
-        <div className="card p-7 lg:min-h-[600px]">
+      <div className="card-border w-full max-w-5xl h-[calc(60vh-5rem)]">
+        <div className="card p-7 h-full flex flex-col">
           <div className="flex justify-between items-center mb-7 border-b border-light-600/20 pb-5">
             <button
               onClick={handleSignOut}
@@ -167,9 +167,9 @@ const SubscriptionTracker: FC = () => {
               </span>
             </div>
           </div>
-          <div className="flex">
+          <div className="flex flex-1 overflow-hidden mt-2">
             <Sidebar activePage={activeTab} onTabChange={handleTabChange} />
-            {renderTabContent()}
+            <div className="flex-1 overflow-y-auto pr-2">{renderTabContent()}</div>
           </div>
         </div>
       </div>
