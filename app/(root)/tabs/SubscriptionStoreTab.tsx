@@ -176,12 +176,12 @@ const SubscriptionStoreTab: FC = () => {
                         <AlertDialogHeader>
                           <AlertDialogTitle>Confirm Purchase</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Are you sure you want to add this subscription to your cart?
+                            Are you sure you want to purchase this subscription?
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel className="btn-secondary">Cancel</AlertDialogCancel>
-                          <AlertDialogAction className="btn-primary">Add to Cart</AlertDialogAction>
+                          <AlertDialogAction className="btn-primary">Purchase</AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
