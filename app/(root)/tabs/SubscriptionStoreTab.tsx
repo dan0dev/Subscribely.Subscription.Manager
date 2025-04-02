@@ -2,6 +2,17 @@
 import { FC, useEffect, useState } from "react";
 import { toast } from "sonner";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { getSubscriptions } from "@/lib/actions/availableSubscription.action";
 
 interface Subscription {
@@ -138,26 +149,42 @@ const SubscriptionStoreTab: FC = () => {
                     <div className="text-2xl font-bold text-primary-100">${subscription.price.toFixed(2)}</div>
 
                     {/* Shopping cart button */}
-                    <button
-                      className="p-2 rounded-full transition-colors cursor-pointer bg-primary-600/20 text-primary-300 hover:text-primary-200"
-                      title="Add to cart"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                      </svg>
-                    </button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <button
+                          className="p-2 rounded-full transition-colors cursor-pointer bg-primary-600/20 text-primary-300 hover:text-primary-200"
+                          title="Add to cart"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                          </svg>
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent className="!z-50 !dark-gradient !rounded-2xl !card-border">
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Confirm Purchase</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to purchase this subscription?
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel className="btn-secondary">Cancel</AlertDialogCancel>
+                          <AlertDialogAction className="btn-primary">Purchase</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </div>
               )
