@@ -4,7 +4,6 @@ export interface Subscription {
   price: number;
   renewalDate: Date;
 }
-
 export interface User {
   id: string;
   name: string;
