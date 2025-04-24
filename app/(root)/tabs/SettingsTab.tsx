@@ -17,8 +17,10 @@ import { FC } from "react";
 
 const SettingsTab: FC = () => {
   return (
-    <div className="flex-1 overflow-x-auto ml-5 px-2">
-      <h2 className="text-2xl font-medium text-white mb-5">Settings</h2>
+    <div className="flex-1 overflow-x-auto px-5">
+      <div className="flex items-center justify-between p-4 border-b border-light-600/20">
+        <h2 className="text-2xl font-medium text-white">Settings</h2>
+      </div>
 
       {/* Divider */}
       <div className="h-px w-full bg-light-600/20 my-5" />

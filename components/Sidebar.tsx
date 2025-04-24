@@ -105,7 +105,7 @@ const Sidebar: FC<SidebarProps> = ({ activePage = "subscriptions", onTabChange }
       </div>
 
       {/* Navigation */}
-      <div className="flex-1 py-7 px-5 flex flex-col gap-3 overflow-y-hidden">
+      <div className="flex-1 py-7 px-5 flex flex-col gap-3 overflow-y-auto">
         <SidebarItem
           icon={<CreditCard size={25} />}
           label="My Subscriptions"
