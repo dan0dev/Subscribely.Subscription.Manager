@@ -1,3 +1,8 @@
+/**
+ * @file SubscriptionStoreTab.tsx
+ * @description This file contains the SubscriptionStoreTab component. It displays all available subscriptions and allows the user to purchase them. This component is almost the same as the ManagementTab.
+ */
+
 "use client";
 import { FC, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -14,6 +19,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { getSubscriptions } from "@/lib/actions/availableSubscription.action";
+// Implementing purchase server action
+import { purchaseSubscription } from "@/lib/actions/purchase.action";
+// IMporting User type
+import { User } from "@/types/types";
+
+interface SubscriptionStoreTabProps {
+  updateUserData?: () => void;
+}
 
 interface Subscription {
   _id: string;
@@ -54,16 +67,54 @@ const formatRenewalInterval = (interval: string | undefined): string => {
   }
 };
 
-const SubscriptionStoreTab: FC = () => {
+const SubscriptionStoreTab: FC<SubscriptionStoreTabProps> = ({ updateUserData }) => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [isLoadingSubscriptions, setIsLoadingSubscriptions] = useState(true);
+  const [selectedSubscription, setSelectedSubscription] = useState<Subscription | null>(null);
+  const [isPurchasing, setIsPurchasing] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  // Fetch user data from parent component or context
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch("/api/user/me", {
+        next: {
+          revalidate: 180, // For 3 minutes do not refetch the user data
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setUser(data.user);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const fetchSubscriptions = async () => {
+    // Check if the subscriptions are cached and the last fetch was less than 3 minutes ago
+    const lastFetch = sessionStorage.getItem("subscriptionsFetchedAt");
+    const cache = sessionStorage.getItem("subscriptions");
+
+    const now = Date.now();
+    const threeMinutes = 180 * 1000;
+
+    if (lastFetch && cache && now - Number(lastFetch) < threeMinutes) {
+      setSubscriptions(JSON.parse(cache));
+      setIsLoadingSubscriptions(false);
+      return;
+    }
+
+    // Fetch subscriptions from the server
     setIsLoadingSubscriptions(true);
     try {
       const response = await getSubscriptions();
       if (response.success) {
         setSubscriptions(response.data || []);
+        sessionStorage.setItem("subscriptions", JSON.stringify(response.data));
+        sessionStorage.setItem("subscriptionsFetchedAt", now.toString());
       } else {
         toast.error(response.message || "Failed to fetch subscriptions");
       }
@@ -75,14 +126,51 @@ const SubscriptionStoreTab: FC = () => {
     }
   };
 
+  // Fetch available subscriptions and user data
   useEffect(() => {
     fetchSubscriptions();
+    fetchUserData();
   }, []);
 
+  const handlePurchase = async () => {
+    if (!selectedSubscription || !user) return;
+
+    setIsPurchasing(true);
+    try {
+      // Use server action
+      const result = await purchaseSubscription(selectedSubscription._id, user.id);
+
+      if (result.success) {
+        toast.success(result.message);
+
+        // Update user's balance locally
+        setUser((prev) => (prev ? { ...prev, accountMoney: result.newBalance } : prev));
+
+        // Refresh user data from server to ensure everything is in sync
+        fetchUserData();
+
+        // Call the updateUserData function to refresh user data in parent component
+        if (updateUserData) {
+          updateUserData();
+        }
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.error("Error purchasing subscription:", error);
+      toast.error("Failed to purchase subscription");
+    } finally {
+      // Reset the purchasing state
+      setIsPurchasing(false);
+      // Reset the selected subscription
+      setSelectedSubscription(null);
+    }
+  };
+
   return (
-    <div className="flex-1 overflow-x-auto ml-5">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-medium text-white mb-5">Available Subscriptions</h2>
+    <div className="flex-1 overflow-x-auto px-5">
+      <div className="flex items-center justify-between p-4 border-b border-light-600/20">
+        <h2 className="text-2xl font-medium text-white">Available Subscriptions</h2>
       </div>
 
       {/* Subscription Cards - Full Width */}
@@ -153,7 +241,8 @@ const SubscriptionStoreTab: FC = () => {
                       <AlertDialogTrigger asChild>
                         <button
                           className="p-2 rounded-full transition-colors cursor-pointer bg-primary-600/20 text-primary-300 hover:text-primary-200"
-                          title="Add to cart"
+                          title="Purchase"
+                          onClick={() => setSelectedSubscription(subscription)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -181,7 +270,9 @@ const SubscriptionStoreTab: FC = () => {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel className="btn-secondary">Cancel</AlertDialogCancel>
-                          <AlertDialogAction className="btn-primary">Purchase</AlertDialogAction>
+                          <AlertDialogAction className="btn-primary" onClick={handlePurchase} disabled={isPurchasing}>
+                            {isPurchasing ? "Processing..." : "Purchase"}
+                          </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
