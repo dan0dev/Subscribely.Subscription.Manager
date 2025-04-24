@@ -157,9 +157,9 @@ const ManagementTab: FC = () => {
   }
 
   return (
-    <div className="flex-1 overflow-x-auto ml-5">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-medium text-white mb-5">Subscription Management</h2>
+    <div className="flex-1 overflow-x-auto px-5">
+      <div className="flex items-center justify-between p-4 border-b border-light-600/20">
+        <h2 className="text-2xl font-medium text-white">Subscription Management</h2>
         <button onClick={openModal} className="btn-secondary">
           Create New
         </button>
