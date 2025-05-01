@@ -27,7 +27,7 @@ const nextConfig = {
 
 export default withSentryConfig(nextConfig, {
   org: "dano-ky",
-  project: "javascript-nextjs",
+  project: "subtracker",
   silent: !process.env.CI,
   widenClientFileUpload: true,
   disableLogger: true,
