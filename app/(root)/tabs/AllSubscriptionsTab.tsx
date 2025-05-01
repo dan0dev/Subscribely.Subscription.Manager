@@ -283,7 +283,6 @@ const SubscriptionTab: FC = () => {
                               ) : (
                                 <>
                                   <Trash2 className="w-4 h-4" />
-                                  <span>Cancel</span>
                                 </>
                               )}
                             </button>
