@@ -1,11 +1,11 @@
 import { jwtVerify } from "jose";
-import { NextResponse } from "next/server";
-import { JWT_SECRET } from "./config/env.ts";
+import { NextRequest, NextResponse } from "next/server";
+import { JWT_SECRET } from "./config/env";
 
 // Oldalak, amelyek nem igényelnek hitelesítést
 const publicPaths = ["/sign-in", "/sign-up"];
 
-export async function middleware(request) {
+export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // Ha a kért útvonal nyilvános, folytassa
