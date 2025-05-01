@@ -2,34 +2,66 @@ import { jwtVerify } from "jose";
 import { NextRequest, NextResponse } from "next/server";
 import { JWT_SECRET } from "./config/env";
 
-// Oldalak, amelyek nem igényelnek hitelesítést
+// Arcjet
+import { isSpoofedBot } from "@arcjet/inspect";
+import arcjet, { detectBot, shield, tokenBucket } from "@arcjet/next";
+
 const publicPaths = ["/sign-in", "/sign-up"];
 
+// Arcjet
+const aj = arcjet({
+  key: process.env.ARCJET_KEY!,
+  characteristics: ["ip.src"],
+  rules: [
+    shield({ mode: "LIVE" }),
+    detectBot({
+      mode: "LIVE",
+      allow: ["CATEGORY:SEARCH_ENGINE"],
+    }),
+    tokenBucket({
+      mode: "LIVE",
+      refillRate: 5,
+      interval: 10,
+      capacity: 10,
+    }),
+  ],
+});
+
 export async function middleware(request: NextRequest) {
+  // 1. Arcjet
+  const decision = await aj.protect(request, { requested: 1 });
+
+  if (decision.isDenied()) {
+    const reason = decision.reason;
+
+    if (reason.isRateLimit()) {
+      return new NextResponse(JSON.stringify({ error: "Too Many Requests", reason }), { status: 429 });
+    } else if (reason.isBot()) {
+      return new NextResponse(JSON.stringify({ error: "No bots allowed", reason }), { status: 403 });
+    } else {
+      return new NextResponse(JSON.stringify({ error: "Forbidden", reason }), { status: 403 });
+    }
+  }
+
+  if (decision.results.some(isSpoofedBot)) {
+    return new NextResponse(JSON.stringify({ error: "Forbidden - Spoofed bot" }), { status: 403 });
+  }
+
+  // 2. Auth
   const path = request.nextUrl.pathname;
-
-  // Ha a kért útvonal nyilvános, folytassa
   const isPublicPath = publicPaths.includes(path);
-
-  // Token kinyerése a cookie-ból
   const token = request.cookies.get("token")?.value || "";
 
-  // Ha nyilvános útvonal és a felhasználó be van jelentkezve, átirányítjuk a főoldalra
   if (isPublicPath && token) {
     try {
-      // Token ellenőrzése
       await jwtVerify(token, new TextEncoder().encode(JWT_SECRET));
-
-      // Átirányítás a főoldalra
       return NextResponse.redirect(new URL("/", request.url));
     } catch (error) {
-      // Token érvénytelen, engedje tovább a kérést
-      console.log(error);
+      console.log("Invalid token:", error);
       return NextResponse.next();
     }
   }
 
-  // Ha nem nyilvános útvonal és a felhasználó nincs bejelentkezve, átirányítjuk a bejelentkezési oldalra
   if (!isPublicPath && !token) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
@@ -37,7 +69,7 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Minden útvonalra alkalmazzuk a middleware-t, kivéve a statikus fájlokat és az API útvonalakat
+// kivéve az API-t és a statikus fájlokat
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
