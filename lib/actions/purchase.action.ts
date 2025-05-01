@@ -39,6 +39,7 @@ export async function purchaseSubscription(subscriptionId: string, userId: strin
     const existingSubscription = await PurchasedSubscription.findOne({
       user: userId,
       subscriptionType: subscriptionId,
+      active: true,
     });
 
     if (existingSubscription) {
