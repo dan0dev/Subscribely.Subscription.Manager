@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cancelSubscription, getAllSubscriptions } from "@/lib/actions/allSubscriptions.action";
-import { AlertCircle, CheckCircle, Clock, Lock, RefreshCw, Trash2, User } from "lucide-react";
+import { AlertCircle, Lock, RefreshCw, Trash2 } from "lucide-react";
 import { FC, useEffect, useState } from "react";
 
 interface Subscription {
@@ -185,13 +185,11 @@ const SubscriptionTab: FC = () => {
               <TableHead className="text-light-100 w-20 font-medium">#</TableHead>
               <TableHead className="text-light-100 font-medium py-3">
                 <div className="flex items-center gap-2">
-                  <User className="w-4 h-4" />
                   <span>User</span>
                 </div>
               </TableHead>
               <TableHead className="text-light-100 font-medium">
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4" />
                   <span>Subscription</span>
                 </div>
               </TableHead>
@@ -202,7 +200,6 @@ const SubscriptionTab: FC = () => {
               </TableHead>
               <TableHead className="text-light-100 font-medium">
                 <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
                   <span>Renewal Date</span>
                 </div>
               </TableHead>
