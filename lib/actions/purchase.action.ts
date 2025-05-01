@@ -60,6 +60,7 @@ export async function purchaseSubscription(subscriptionId: string, userId: strin
     // Check if user has reached the maximum number of subscriptions (3)
     const userSubscriptions = await PurchasedSubscription.countDocuments({
       user: userId,
+      active: true,
     });
 
     if (userSubscriptions >= 3) {
