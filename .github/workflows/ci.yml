@@ -44,6 +44,9 @@ jobs:
       - name: Run build
         run: npm run build
         # Ha a buildhez környezeti változók kellenek, itt kell beállítani őket
-        # env:
-        #   NEXT_PUBLIC_VALAMI: ${{ secrets.NEXT_PUBLIC_VALAMI_SECRET }}
-        #   DATABASE_URL: ${{ secrets.DATABASE_URL_SECRET }}
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+          ARCJET_KEY: ${{ secrets.ARCJET_KEY }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
