@@ -4,17 +4,17 @@ import User from "@/lib/models/user";
 import * as jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<Response> {
   try {
     // A promise that rejects after 8 seconds
-    const timeoutPromise = new Promise((_, reject) => {
+    const timeoutPromise = new Promise<never>((_, reject) => {
       setTimeout(() => {
         reject(new Error("Login request timed out after 8 seconds"));
       }, 8000);
     });
 
     // Promise that resolves the login process
-    const loginPromise = (async () => {
+    const loginPromise = (async (): Promise<NextResponse> => {
       await connectDB();
 
       const body = await request.json();
@@ -73,6 +73,7 @@ export async function POST(request: NextRequest) {
     // Race between login and timeout
     const response = await Promise.race([loginPromise, timeoutPromise]);
 
+    // Mivel tudjuk, hogy a response egy NextResponse (Response), így biztonságosan visszaadhatjuk
     return response;
   } catch (error) {
     console.error("Login error:", error);
