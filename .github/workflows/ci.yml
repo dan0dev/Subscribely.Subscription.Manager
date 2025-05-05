@@ -6,11 +6,11 @@ name: CI Build and Lint # A munkafolyamat neve (megjelenik a GitHub Actions fül
 on:
   # Futtatás, ha push történik a 'main' ágra
   push:
-    branches: [main] # Cseréld le 'master'-re, ha az a fő ágad neve
+    branches: [master] # Cseréld le 'master'-re, ha az a fő ágad neve
 
   # Futtatás, ha Pull Requestet nyitnak vagy frissítenek a 'main' ágra
   pull_request:
-    branches: [main] # Cseréld le 'master'-re, ha az a fő ágad neve
+    branches: [master] # Cseréld le 'master'-re, ha az a fő ágad neve
 
 # A munkafolyamat által végrehajtott feladatok (jobs)
 jobs:
