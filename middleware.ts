@@ -69,7 +69,7 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// kivéve az API-t és a statikus fájlokat
+// exceptions for api routes and static files
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
