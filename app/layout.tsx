@@ -18,11 +18,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Ide tedd a console.log-ot, hogy lefusson rendereléskor
+  console.log("CI test successful");
+
   return (
     <html lang="en" className="dark">
       <body className={`${monaSans.variable} antialiased pattern`}>
         {children}
-
         <Toaster />
       </body>
     </html>
