@@ -4,36 +4,33 @@ import Sidebar from "@/components/Sidebar";
 import { LogOut } from "lucide-react";
 import { type FC, useEffect, useState } from "react";
 
-// Import the type definition for the User object.
+// Import for User type definition
 import { User } from "@/types/types";
 
 import AllSubscriptionsTab from "./tabs/AllSubscriptionsTab";
 import ManagementTab from "./tabs/ManagementTab";
-import SettingsTab from "./tabs/SettingsTab";
+import SettingsTab from "./tabs/settings-tab";
 import SubscriptionStoreTab from "./tabs/SubscriptionStoreTab";
 import SubscriptionTab from "./tabs/SubscriptionTab";
 
 const SubscriptionTracker: FC = () => {
-  // State variable to store the fetched user data. Initialized to null.
+  // Store user data
   const [user, setUser] = useState<User | null>(null);
 
-  // State variable to track the loading status of user data fetching. Initialized to true.
+  // Loading state
   const [loading, setLoading] = useState(true);
 
-  // State variable to store any error message during data fetching. Initialized to null.
+  // Error message storage
   const [error, setError] = useState<string | null>(null);
 
-  // State variable to keep track of the currently active tab. Initialized to 'subscriptions'.
+  // Track active tab
   const [activeTab, setActiveTab] = useState<string>("subscriptions");
 
-  // State variable to trigger user data refetching. Stores a timestamp.
-  // Initialized with the current time. Changing this value triggers the useEffect hook.
+  // Timestamp used to trigger data refresh
   const [lastUpdated, setLastUpdated] = useState<number>(Date.now());
 
   /**
-   * @effect useEffect hook to fetch user data on component mount and when `lastUpdated` changes.
-   * This hook defines an async function `fetchUserData` to make an API call
-   * to retrieve the current user's information.
+   * Fetch user data when component mounts or lastUpdated changes
    */
   useEffect(() => {
     const fetchUserData = async () => {
@@ -51,60 +48,51 @@ const SubscriptionTracker: FC = () => {
           throw new Error(data.message || "Failed to fetch user data");
         }
 
-        // Update the user state with the fetched user data.
+        // Update user data
         setUser(data.user as User);
-        // Clear any previous error messages.
+        // Clear any errors
         setError(null);
       } catch (err) {
-        // Debugging error.
+        // Log error for debugging
         console.error("Error fetching user data:", err);
-        // Update the error state with the error message.
+        // Set error message
         setError(err instanceof Error ? err.message : "Unknown error occurred");
-        // Set user state back to null in case of an error.
+        // Reset user data
         setUser(null);
       } finally {
-        // Set loading state to false once the fetch attempt is complete (success or failure).
+        // End loading state
         setLoading(false);
       }
     };
 
     fetchUserData();
-    // []: This effect runs when the component mounts and whenever `lastUpdated` changes.
+    // Run when component mounts and when lastUpdated changes
   }, [lastUpdated]);
 
   /**
-   * @function handleTabChange
-   * @description Updates the active tab state when a user clicks on a different tab in the Sidebar.
-   * It also triggers a user data refresh specifically when switching to the 'subscription-store' tab.
-   * @param {string} tab - The identifier of the tab to switch to.
+   * Handle tab changes when user clicks different navigation items
+   * Refreshes user data when switching to subscription store
    */
   const handleTabChange = (tab: string) => {
-    // Update the state variable that controls which tab is currently displayed.
+    // Update active tab
     setActiveTab(tab);
 
-    // When switching specifically to the 'subscription-store' tab,
-    // update `lastUpdated` to trigger the useEffect hook and refetch user data.
-    // Ensures the user's current money is up-to-date before they try to buy a subscription.
+    // Refresh user data when opening store tab
+    // Makes sure we have current balance before purchases
     if (tab === "subscription-store") {
       setLastUpdated(Date.now());
     }
   };
 
   /**
-   * @function updateUserData
-   * @description Provides a way for child components (like SubscriptionStoreTab)
-   * to trigger a refresh of the user data in this parent component.
-   * It works by updating the `lastUpdated` state variable, which causes the
-   * useEffect hook responsible for fetching user data to run again.
+   * Function for child components to trigger user data refresh
    */
   const updateUserData = () => {
     setLastUpdated(Date.now());
   };
 
   /**
-   * @function handleSignOut
-   * @description Handles the user sign-out process by making an API call
-   * to the logout endpoint and redirecting the user upon success.
+   * Handle user logout
    */
   const handleSignOut = async () => {
     try {
@@ -123,28 +111,26 @@ const SubscriptionTracker: FC = () => {
   };
 
   /**
-   * @function renderTabContent
-   * @description Determines which tab component to render based on the `activeTab` state.
-   * @returns {JSX.Element} The component corresponding to the active tab.
+   * Renders the appropriate component based on active tab
+   * Will be replaced with State pattern in future refactoring
    */
   const renderTabContent = () => {
-    // Use a switch statement to select the component based on the active tab's identifier.
-    // a későbbiekben State Design Pattern implementálásával a switch statement helyett State objektumot használunk
-
+    // Choose component based on active tab
+    // This will be replaced with State Design Pattern in the future
     switch (activeTab) {
       case "subscriptions":
         return <SubscriptionTab />;
       case "subscription-store":
-        // Pass the `updateUserData` function as a prop to allow the store tab
-        // to trigger data refreshes (e.g., after purchasing a subscription).
+        // Pass update function to allow refresh after purchases
         return <SubscriptionStoreTab updateUserData={updateUserData} />;
       case "management":
         return <ManagementTab />;
       case "all-subscriptions":
         return <AllSubscriptionsTab />;
       case "settings":
-        return <SettingsTab />;
-      // Default case renders the main 'subscriptions' tab if the activeTab value is unrecognized.
+        // Pass update function
+        return <SettingsTab updateUserData={updateUserData} />;
+      // Default to subscriptions tab
       default:
         return <SubscriptionTab />;
     }
@@ -167,7 +153,7 @@ const SubscriptionTracker: FC = () => {
             {/* User information display (Name and Account Money) */}
             <div className="flex space-x-3">
               <span className="text-light-100 text-base font-medium flex items-center">
-                {/* Conditional rendering based on loading and error states */}
+                {/* Show different content based on loading state */}
                 {loading ? (
                   "Loading..."
                 ) : error ? (
@@ -188,7 +174,7 @@ const SubscriptionTracker: FC = () => {
                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                       />
                     </svg>
-                    {/* Display user name, truncated if longer than 10 characters. */}
+                    {/* Truncate long usernames */}
                     {user?.name
                       ? (() => {
                           return user.name.length > 10 ? `${user.name.substring(0, 10)}...` : user.name;
@@ -197,9 +183,9 @@ const SubscriptionTracker: FC = () => {
                   </>
                 )}
               </span>
-              {/* User Account Money Display */}
+              {/* Account balance display */}
               <span className="text-light-100 text-base font-medium flex items-center">
-                {/* Conditional rendering based on loading and error states */}
+                {/* Show different content based on loading state */}
                 {loading ? (
                   "Loading..."
                 ) : error ? (
@@ -220,7 +206,7 @@ const SubscriptionTracker: FC = () => {
                         d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    ${/* Format the account money as a US dollar amount with two decimal places. */}
+                    ${/* Format money with 2 decimal places */}
                     {user?.accountMoney?.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
@@ -232,11 +218,11 @@ const SubscriptionTracker: FC = () => {
           </div>
           {/* Main content area with Sidebar and Tab Content */}
           <div className="flex flex-1 overflow-hidden mt-2">
-            {/* Sidebar component */}
+            {/* Sidebar navigation */}
             <Sidebar activePage={activeTab} onTabChange={handleTabChange} />
-            {/* Container for the active tab's content */}
+            {/* Tab content container */}
             <div className="flex-1 overflow-y-auto pr-2">
-              {/* Render the content of the currently selected tab */}
+              {/* Display active tab content */}
               {renderTabContent()}
             </div>
           </div>
