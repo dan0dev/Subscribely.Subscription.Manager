@@ -97,7 +97,7 @@ const SubscriptionTable: FC<SubscriptionTableProps> = ({
       </TableHeader>
       <TableBody>
         {subscriptions.map((subscription, index) => (
-          <TableRow key={subscription.id} className="border-b border-light-600/20 hover:bg-dark-300/50 animate-fadeIn">
+          <TableRow key={subscription.id} className="border-b border-light-600/20 hover:bg-dark-300/50">
             <TableCell className="font-medium text-light-400">{index + 1}</TableCell>
             <TableCell className="font-medium text-white">{subscription.name}</TableCell>
             <TableCell>
