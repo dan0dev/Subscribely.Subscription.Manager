@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema(
     },
     accountMoney: {
       type: Number,
-      default: 5000,
+      default: 1000,
       min: 0,
       max: 999999999,
     },
