@@ -10,7 +10,7 @@ import { User } from "@/types/types";
 import AllSubscriptionsTab from "./tabs/AllSubscriptionsTab";
 import ManagementTab from "./tabs/ManagementTab";
 import SettingsTab from "./tabs/settings-tab";
-import SubscriptionStoreTab from "./tabs/SubscriptionStoreTab";
+import SubscriptionStoreTab from "./tabs/subscription-store-tab";
 import SubscriptionTab from "./tabs/SubscriptionTab";
 
 const SubscriptionTracker: FC = () => {
