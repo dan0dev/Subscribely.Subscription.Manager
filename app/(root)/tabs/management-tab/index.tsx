@@ -4,11 +4,11 @@ import {
   deleteSubscription,
   getSubscriptions,
 } from "@/lib/actions/availableSubscription.action";
+import { FormValues, Subscription } from "@/types/types";
 import { FC, useEffect, useState } from "react";
 import { toast } from "sonner";
 import SubscriptionModal from "./SubscriptionModal";
 import SubscriptionsGrid from "./SubscriptionsGrid";
-import { FormValues, Subscription } from "./types";
 
 const ManagementTab: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

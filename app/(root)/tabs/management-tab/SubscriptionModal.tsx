@@ -1,7 +1,7 @@
 import Modal from "@/components/DynamicModal";
+import { FormValues } from "@/types/types";
 import { FC } from "react";
 import SubscriptionForm from "./SubscriptionForm";
-import { FormValues } from "./types";
 
 interface SubscriptionModalProps {
   isOpen: boolean;

@@ -1,8 +1,8 @@
+import { Subscription } from "@/types/types";
 import { FC } from "react";
 import SubscriptionCard from "./SubscriptionCard";
 import SubscriptionsEmptyState from "./SubscriptionsEmptyState";
 import SubscriptionsSkeleton from "./SubscriptionsSkeleton";
-import { Subscription } from "./types";
 
 interface SubscriptionsGridProps {
   subscriptions: Subscription[];

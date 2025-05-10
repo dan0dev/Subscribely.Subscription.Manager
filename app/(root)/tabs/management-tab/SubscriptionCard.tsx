@@ -1,5 +1,5 @@
+import { Subscription } from "@/types/types";
 import { FC } from "react";
-import { Subscription } from "./types";
 
 interface SubscriptionCardProps {
   subscription: Subscription;
