@@ -9,7 +9,7 @@ import { User } from "@/types/types";
 
 import AllSubscriptionsTab from "./tabs/AllSubscriptionsTab";
 import ManagementTab from "./tabs/ManagementTab";
-import SettingsTab from "./tabs/settings-tab/SettingsTab";
+import SettingsTab from "./tabs/settings-tab";
 import SubscriptionStoreTab from "./tabs/SubscriptionStoreTab";
 import SubscriptionTab from "./tabs/SubscriptionTab";
 
