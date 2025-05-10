@@ -4,9 +4,9 @@ import { searchUsers, updateUserBalance } from "@/lib/actions/adminActions";
 import { FC, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AdminPanel from "./AdminPanel";
+import AdminPanelLoadingState from "./AdminPanelLoadingState";
 import DangerZone from "./DangerZone";
 import Divider from "./Divider";
-import LoadingState from "./LoadingState";
 import SettingsToggle from "./SettingsToggle";
 
 interface UserData {
@@ -23,7 +23,7 @@ interface SettingsTabProps {
 
 const SettingsTab: FC<SettingsTabProps> = ({ updateUserData }) => {
   const [user, setUser] = useState<{ role: string; id?: string } | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [adminPanelLoading, setAdminPanelLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<UserData[]>([]);
   const [searching, setSearching] = useState(false);
@@ -45,14 +45,16 @@ const SettingsTab: FC<SettingsTabProps> = ({ updateUserData }) => {
 
         if (data.success) {
           setUser(data.user);
+          // Set adminPanelLoading to false regardless of role
+          // The admin panel will only be shown if user.role === "admin"
+          setAdminPanelLoading(false);
         } else {
           throw new Error(data.message || "Failed to fetch user data");
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
         toast.error("Failed to load user data.");
-      } finally {
-        setLoading(false);
+        setAdminPanelLoading(false);
       }
     }
 
@@ -124,10 +126,6 @@ const SettingsTab: FC<SettingsTabProps> = ({ updateUserData }) => {
     }
   };
 
-  if (loading) {
-    return <LoadingState />;
-  }
-
   return (
     <div className="flex-1 overflow-x-auto">
       <div className="flex items-center justify-between p-4 border-b border-light-600/20 h-[72px]">
@@ -138,19 +136,23 @@ const SettingsTab: FC<SettingsTabProps> = ({ updateUserData }) => {
         {/* Admin Panel section - only visible to admins */}
         {user && user.role === "admin" && (
           <>
-            <AdminPanel
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              handleSearch={handleSearch}
-              searching={searching}
-              searchResults={searchResults}
-              selectedUser={selectedUser}
-              setSelectedUser={setSelectedUser}
-              newBalance={newBalance}
-              setNewBalance={setNewBalance}
-              handleUpdateBalance={handleUpdateBalance}
-              updating={updating}
-            />
+            {adminPanelLoading ? (
+              <AdminPanelLoadingState />
+            ) : (
+              <AdminPanel
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                handleSearch={handleSearch}
+                searching={searching}
+                searchResults={searchResults}
+                selectedUser={selectedUser}
+                setSelectedUser={setSelectedUser}
+                newBalance={newBalance}
+                setNewBalance={setNewBalance}
+                handleUpdateBalance={handleUpdateBalance}
+                updating={updating}
+              />
+            )}
             <Divider />
           </>
         )}
