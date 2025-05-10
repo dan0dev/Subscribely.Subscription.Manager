@@ -2,6 +2,7 @@
 import { purchaseSubscription } from "@/lib/actions/purchase.action";
 import { Subscription, User } from "@/types/types";
 import { FC, useState } from "react";
+import { toast } from "sonner";
 import PurchaseDialog from "./PurchaseDialog";
 import SubscriptionCard from "./SubscriptionCard";
 
@@ -67,8 +68,13 @@ const SubscriptionsList: FC<SubscriptionsListProps> = ({ subscriptions, isLoadin
           try {
             const result = await purchaseSubscription(selectedSubscription._id, user.id);
             if (result.success) {
+              toast.success(`Successfully purchased ${selectedSubscription.name}!`);
               onPurchaseSuccess();
+            } else {
+              toast.error(result.message || "Failed to purchase subscription");
             }
+          } catch (error) {
+            toast.error(`An error occurred: ${error instanceof Error ? error.message : "Unknown error"}`);
           } finally {
             setIsPurchasing(false);
             setSelectedSubscription(null);

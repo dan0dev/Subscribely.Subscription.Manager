@@ -85,6 +85,7 @@ const SubscriptionStoreTab: FC<SubscriptionStoreTabProps> = ({ updateUserData })
           user={user}
           onPurchaseSuccess={() => {
             fetchUserData();
+
             if (updateUserData) {
               updateUserData();
             }
