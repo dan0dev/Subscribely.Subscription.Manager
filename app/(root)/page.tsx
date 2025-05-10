@@ -11,7 +11,7 @@ import AllSubscriptionsTab from "./tabs/AllSubscriptionsTab";
 import ManagementTab from "./tabs/management-tab";
 import SettingsTab from "./tabs/settings-tab";
 import SubscriptionStoreTab from "./tabs/subscription-store-tab";
-import SubscriptionTab from "./tabs/SubscriptionTab";
+import SubscriptionTab from "./tabs/subscription-tab";
 
 const SubscriptionTracker: FC = () => {
   // Store user data
