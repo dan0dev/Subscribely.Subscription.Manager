@@ -1,3 +1,4 @@
+import { z } from "zod";
 export interface Subscription {
   _id: string;
   name: string;
@@ -20,3 +21,15 @@ export interface User {
   accountMoney: number;
   role?: string;
 }
+
+export const formSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters"),
+  description: z.string().optional(),
+  price: z.string().refine((val) => !isNaN(Number(val)), {
+    message: "Price must be a valid number",
+  }),
+  renewalInterval: z.string().default("1m"),
+  active: z.boolean().default(true),
+});
+
+export type FormValues = z.infer<typeof formSchema>;
