@@ -102,20 +102,22 @@ const ManagementTab: FC = () => {
   };
 
   return (
-    <div className="flex-1 overflow-x-auto px-5">
-      <div className="flex items-center justify-between p-4 border-b border-light-600/20">
-        <h2 className="text-2xl font-medium text-white">Subscription Management</h2>
+    <div className="flex-1 overflow-x-auto">
+      <div className="flex items-center justify-between p-4 border-b border-light-600/20 h-[72px]">
+        <h2 className="tab-title">Subscription Management</h2>
         <button onClick={openModal} className="btn-secondary">
           Create New
         </button>
       </div>
 
-      <SubscriptionsGrid
-        subscriptions={subscriptions}
-        isLoading={isLoadingSubscriptions}
-        onDelete={handleDelete}
-        isDeleting={isDeleting}
-      />
+      <div className="px-5">
+        <SubscriptionsGrid
+          subscriptions={subscriptions}
+          isLoading={isLoadingSubscriptions}
+          onDelete={handleDelete}
+          isDeleting={isDeleting}
+        />
+      </div>
 
       <SubscriptionModal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} isLoading={isLoading} />
     </div>

@@ -129,50 +129,52 @@ const SettingsTab: FC<SettingsTabProps> = ({ updateUserData }) => {
   }
 
   return (
-    <div className="flex-1 overflow-x-auto px-5">
-      <div className="flex items-center justify-between p-4 border-b border-light-600/20">
-        <h2 className="text-2xl font-medium text-white">Settings</h2>
+    <div className="flex-1 overflow-x-auto">
+      <div className="flex items-center justify-between p-4 border-b border-light-600/20 h-[72px]">
+        <h2 className="tab-title">Settings</h2>
       </div>
 
-      {/* Admin Panel section - only visible to admins */}
-      {user && user.role === "admin" && (
-        <>
-          <AdminPanel
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            handleSearch={handleSearch}
-            searching={searching}
-            searchResults={searchResults}
-            selectedUser={selectedUser}
-            setSelectedUser={setSelectedUser}
-            newBalance={newBalance}
-            setNewBalance={setNewBalance}
-            handleUpdateBalance={handleUpdateBalance}
-            updating={updating}
-          />
-          <Divider />
-        </>
-      )}
+      <div className="px-5">
+        {/* Admin Panel section - only visible to admins */}
+        {user && user.role === "admin" && (
+          <>
+            <AdminPanel
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              handleSearch={handleSearch}
+              searching={searching}
+              searchResults={searchResults}
+              selectedUser={selectedUser}
+              setSelectedUser={setSelectedUser}
+              newBalance={newBalance}
+              setNewBalance={setNewBalance}
+              handleUpdateBalance={handleUpdateBalance}
+              updating={updating}
+            />
+            <Divider />
+          </>
+        )}
 
-      {/* Settings Toggles */}
-      <SettingsToggle
-        title="Subscription Auto-Renewal"
-        description="Enable or disable automatic renewal of your subscription. (This feature is currently disabled)."
-        disabled={true}
-      />
-      <Divider />
+        {/* Settings Toggles */}
+        <SettingsToggle
+          title="Subscription Auto-Renewal"
+          description="Enable or disable automatic renewal of your subscription. (This feature is currently disabled)."
+          disabled={true}
+        />
+        <Divider />
 
-      <SettingsToggle
-        title="Automatic Email Messages"
-        description="Enable or disable automatic email messages from the app. (This feature is currently enabled)."
-        checked={true}
-        disabled={true}
-      />
-      <Divider />
+        <SettingsToggle
+          title="Automatic Email Messages"
+          description="Enable or disable automatic email messages from the app. (This feature is currently enabled)."
+          checked={true}
+          disabled={true}
+        />
+        <Divider />
 
-      {/* Danger Zone */}
-      <DangerZone />
-      <Divider />
+        {/* Danger Zone */}
+        <DangerZone />
+        <Divider />
+      </div>
     </div>
   );
 };
