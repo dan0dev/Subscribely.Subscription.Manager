@@ -21,7 +21,7 @@ const ManagementTab: FC = () => {
   const closeModal = () => setIsModalOpen(false);
 
   const fetchSubscriptions = async () => {
-    // Check if the subscriptions are cached and the last fetch was less than 3 minutes ago
+    // Check if the subscriptions are cached and the last fetch was less than 30 seconds ago
     const lastFetch = sessionStorage.getItem("subscriptionsFetchedAt");
     const cache = sessionStorage.getItem("subscriptions");
 
