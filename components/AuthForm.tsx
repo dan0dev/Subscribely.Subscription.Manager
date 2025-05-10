@@ -123,7 +123,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
         toast.error(
           type === "sign-in"
             ? "User does not exist. Please check your credentials or sign up."
-            : "User does not exist. Please check your email or sign up."
+            : "User already exists. Try other credentials or sign in."
         );
       } else if (errorMessage.includes("network") || errorMessage.includes("connect")) {
         toast.error("Network error. Please check your connection and try again.");
