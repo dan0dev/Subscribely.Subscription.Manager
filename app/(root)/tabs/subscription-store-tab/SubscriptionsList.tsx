@@ -1,10 +1,9 @@
 "use client";
 import { purchaseSubscription } from "@/lib/actions/purchase.action";
-import { User } from "@/types/types";
+import { Subscription, User } from "@/types/types";
 import { FC, useState } from "react";
 import PurchaseDialog from "./PurchaseDialog";
 import SubscriptionCard from "./SubscriptionCard";
-import { Subscription } from "./types";
 
 interface SubscriptionsListProps {
   subscriptions: Subscription[];
