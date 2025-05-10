@@ -235,7 +235,7 @@ const SubscriptionTab: FC = () => {
                           <AlertDialogTitle className="text-white">Cancel Subscription</AlertDialogTitle>
                           <AlertDialogDescription className="text-light-400">
                             Are you sure you want to cancel your {subscription.name} subscription? This action cannot be
-                            undone.
+                            undone, and refunds are not available at this time.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter className="mt-4">
