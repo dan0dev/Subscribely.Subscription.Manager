@@ -21,11 +21,27 @@ const ManagementTab: FC = () => {
   const closeModal = () => setIsModalOpen(false);
 
   const fetchSubscriptions = async () => {
+    // Check if the subscriptions are cached and the last fetch was less than 3 minutes ago
+    const lastFetch = sessionStorage.getItem("subscriptionsFetchedAt");
+    const cache = sessionStorage.getItem("subscriptions");
+
+    const now = Date.now();
+    const threeMinutes = 30 * 1000;
+
+    if (lastFetch && cache && now - Number(lastFetch) < threeMinutes) {
+      setSubscriptions(JSON.parse(cache));
+      setIsLoadingSubscriptions(false);
+      return;
+    }
+
+    // Fetch subscriptions from the server
     setIsLoadingSubscriptions(true);
     try {
       const response = await getSubscriptions();
       if (response.success) {
         setSubscriptions(response.data || []);
+        sessionStorage.setItem("subscriptions", JSON.stringify(response.data));
+        sessionStorage.setItem("subscriptionsFetchedAt", now.toString());
       } else {
         toast.error(response.message || "Failed to fetch subscriptions");
       }
@@ -37,6 +53,7 @@ const ManagementTab: FC = () => {
     }
   };
 
+  // Fetch available subscriptions and user data
   useEffect(() => {
     fetchSubscriptions();
   }, []);
