@@ -155,14 +155,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
                 <FormField
                   control={form.control}
                   name="name"
-                  label={
-                    <span>
-                      Username{" "}
-                      <span className="text-xs text-light-400">
-                        (For the best experience, please use a valid email address or a temporary email service)
-                      </span>
-                    </span>
-                  }
+                  label={<span>Usernames</span>}
                   placeholder="john_doe"
                   disabled={isLoading}
                 />
@@ -171,7 +164,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
               <FormField
                 control={form.control}
                 name="email"
-                label={isSignIn ? "Email or Username" : "Email"}
+                label={isSignIn ? "Email or Username" : "Email (valid or temp email address recommended)"}
                 placeholder={isSignIn ? "your.email@example.com or username" : "your.email@example.com"}
                 type={isSignIn ? "text" : "email"}
                 disabled={isLoading}
