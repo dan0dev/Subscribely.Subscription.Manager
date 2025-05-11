@@ -130,7 +130,7 @@ const SubscriptionTable: FC<SubscriptionTableProps> = ({
                 >
                   <AlertDialogTrigger asChild>
                     <button
-                      className="text-light-400 hover:text-destructive-100 transition-colors focus:outline-none focus:ring-2 focus:ring-destructive-100/40 rounded-full p-1.5"
+                      className="text-light-400 hover:text-destructive-100 transition-colors focus:outline-none focus:ring-2 focus:ring-destructive-100/40 rounded-full p-1.5 cursor-pointer"
                       aria-label={`Cancel ${subscription.name} subscription`}
                       disabled={cancelInProgress === subscription.id}
                     >
