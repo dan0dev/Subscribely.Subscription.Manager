@@ -7,6 +7,7 @@
 
 import { revalidateTag } from "next/cache";
 import connectDB from "../db";
+import { sendSubscriptionCancellationEmail } from "../email/emailService";
 import { PurchasedSubscription } from "../models/purchasedSubscription";
 
 /**
@@ -82,7 +83,7 @@ export async function cancelUserSubscription(subscriptionId: string) {
     console.log("Server: Connected to database for cancellation");
 
     // Find the subscription in the database by ID
-    const subscription = await PurchasedSubscription.findById(subscriptionId);
+    const subscription = await PurchasedSubscription.findById(subscriptionId).populate("user");
 
     // If the subscription is not found, return an error
     if (!subscription) {
@@ -98,6 +99,33 @@ export async function cancelUserSubscription(subscriptionId: string) {
     // Save the modified subscription to the database
     await subscription.save();
     console.log(`Server: Successfully saved subscription with active=false`);
+
+    // Get user information for the email
+    const user = subscription.user as unknown as { email: string; name: string };
+
+    // Send cancellation email
+    try {
+      const emailSent = await sendSubscriptionCancellationEmail(
+        {
+          email: user.email,
+          name: user.name,
+        },
+        {
+          name: subscription.name,
+          price: subscription.price,
+        },
+        false // Not cancelled by admin
+      );
+
+      if (emailSent) {
+        console.log(`🚀 USER CANCELLATION: Email notification successfully sent to ${user.email}`);
+      } else {
+        console.log(`⚠️ USER CANCELLATION: Email delivery failed, but subscription was cancelled successfully`);
+      }
+    } catch (emailError) {
+      // Log the error but don't fail the cancellation if email sending fails
+      console.error("⚠️ USER CANCELLATION: Unexpected error during email sending:", emailError);
+    }
 
     // Revalidate caches to ensure data is fresh
     revalidateTag("user");

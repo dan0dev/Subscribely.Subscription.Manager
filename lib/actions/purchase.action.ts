@@ -9,6 +9,7 @@
 
 import { revalidateTag } from "next/cache";
 import connectDB from "../db";
+import { sendSubscriptionPurchaseEmail } from "../email/emailService";
 import { AvailableSubscription } from "../models/availableSubscription";
 import { PurchasedSubscription } from "../models/purchasedSubscription";
 import User from "../models/user";
@@ -88,6 +89,30 @@ export async function purchaseSubscription(subscriptionId: string, userId: strin
       nextRenewal,
       active: true,
     });
+
+    // Send confirmation email
+    try {
+      const emailSent = await sendSubscriptionPurchaseEmail(
+        {
+          email: user.email,
+          name: user.name,
+        },
+        {
+          name: subscription.name,
+          price: subscription.price,
+          nextRenewal: nextRenewal.toISOString(),
+        }
+      );
+
+      if (emailSent) {
+        console.log(`🚀 PURCHASE FLOW: Email notification successfully sent to ${user.email}`);
+      } else {
+        console.log(`⚠️ PURCHASE FLOW: Email delivery failed, but subscription was created successfully`);
+      }
+    } catch (emailError) {
+      // Log the error but don't fail the purchase if email sending fails
+      console.error("⚠️ PURCHASE FLOW: Unexpected error during email sending:", emailError);
+    }
 
     // Revalidate cache
     revalidateTag("user");

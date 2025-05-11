@@ -5,6 +5,7 @@
 
 "use server";
 
+import { sendSubscriptionCancellationEmail } from "../email/emailService";
 import { PurchasedSubscription } from "../models/purchasedSubscription";
 
 /**
@@ -46,7 +47,7 @@ export async function getAllSubscriptions() {
 
 /**
  * @function cancelSubscription
- * @description This function handles the cancellation of a subscription, but actually only makes it inactive,
+ * @description This function handles the cancellation of a subscription by an admin, but actually only makes it inactive,
  * it does not delete it from the database. This allows for tracking previous subscriptions
  * and creating statistics for future use.
  *
@@ -55,8 +56,8 @@ export async function getAllSubscriptions() {
  */
 export async function cancelSubscription(subscriptionId: string) {
   try {
-    // Find the subscription in the database by ID
-    const subscription = await PurchasedSubscription.findById(subscriptionId);
+    // Find the subscription in the database by ID and populate the user
+    const subscription = await PurchasedSubscription.findById(subscriptionId).populate("user");
 
     // If the subscription is not found, throw an error
     if (!subscription) {
@@ -68,6 +69,33 @@ export async function cancelSubscription(subscriptionId: string) {
 
     // Save the modified subscription to the database
     await subscription.save();
+
+    // Get user information for the email
+    const user = subscription.user as unknown as { email: string; name: string };
+
+    // Send cancellation email
+    try {
+      const emailSent = await sendSubscriptionCancellationEmail(
+        {
+          email: user.email,
+          name: user.name,
+        },
+        {
+          name: subscription.name,
+          price: subscription.price,
+        },
+        true // Cancelled by admin
+      );
+
+      if (emailSent) {
+        console.log(`🚀 ADMIN CANCELLATION: Email notification successfully sent to ${user.email}`);
+      } else {
+        console.log(`⚠️ ADMIN CANCELLATION: Email delivery failed, but subscription was cancelled successfully`);
+      }
+    } catch (emailError) {
+      // Log the error but don't fail the cancellation if email sending fails
+      console.error("⚠️ ADMIN CANCELLATION: Unexpected error during email sending:", emailError);
+    }
 
     // Return a success message
     return { success: true };
