@@ -9,18 +9,57 @@ const monaSans = Mona_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Subscribely",
+  title: {
+    default: "Subscribely",
+    template: "%s | Subscribely",
+  },
   description: "Subscription Manager",
+  metadataBase: new URL("https://subscribely-subscription-manager.vercel.app/"),
+  openGraph: {
+    title: "Subscribely",
+    description: "Subscription Manager",
+    url: "https://subscribely-subscription-manager.vercel.app/",
+    siteName: "Subscribely",
+    images: ["/og-image.png"],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Subscribely",
+    description: "Subscription Manager",
+    site: "@subscribely",
+    creator: "@subscribely",
+    images: ["/twitter-image.png"],
+  },
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  keywords: [
+    "Subscribely",
+    "Subscription Manager",
+    "subscriptions",
+    "management",
+    "finance",
+    "budgeting",
+    "personal finance",
+    "money management",
+    "expense tracking",
+    "financial planning",
+    "subscription tracking",
+    "subscription management app",
+    "subscription organizer",
+    "subscription reminder",
+    "subscription cancellation",
+    "subscription overview",
+    "subscription insights",
+  ],
+  robots: "index, follow",
+  authors: [{ name: "Subscribely Team" }],
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  // Ide tedd a console.log-ot, hogy lefusson rendereléskor
-  console.log("CI test successful");
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
       <body className={`${monaSans.variable} antialiased pattern`}>
