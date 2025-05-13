@@ -137,22 +137,22 @@ const SubscriptionTracker: FC = () => {
   };
 
   return (
-    <div className="min-h-screen p-10 pb-28 md:pb-10 flex items-center justify-center bg-dark-500">
-      <div className="card-border w-full max-w-5xl h-[calc(60vh-5rem)]">
-        <div className="card p-7 h-full flex flex-col">
-          <div className="flex justify-between items-center mb-7 border-b border-light-600/20 pb-5">
+    <div className="min-h-screen px-4 py-6 sm:p-8 md:p-10 pb-28 md:pb-10 flex items-center justify-center bg-dark-500">
+      <div className="card-border w-full max-w-5xl h-[calc(100vh-4rem)] sm:h-[calc(80vh-4rem)] md:h-[calc(70vh-4rem)] lg:h-[calc(60vh-4rem)]">
+        <div className="card p-3 sm:p-5 md:p-7 h-full flex flex-col">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-7 border-b border-light-600/20 pb-3 sm:pb-5 gap-3 sm:gap-0">
             {/* Sign Out button */}
             <button
               onClick={handleSignOut}
-              className="flex items-center text-light-100 text-base font-medium cursor-pointer"
+              className="flex items-center text-light-100 text-sm sm:text-base font-medium cursor-pointer"
               aria-label="Sign Out"
             >
-              <LogOut size={22} className="mr-3" /> {/* Sign out icon */}
-              <span className="text-base font-medium">Sign Out</span>
+              <LogOut size={20} className="mr-2 sm:mr-3" /> {/* Sign out icon */}
+              <span className="text-sm sm:text-base font-medium">Sign Out</span>
             </button>
             {/* User information display (Name and Account Money) */}
-            <div className="flex space-x-3">
-              <span className="text-light-100 text-base font-medium flex items-center">
+            <div className="flex space-x-3 w-full sm:w-auto justify-end">
+              <span className="text-light-100 text-sm sm:text-base font-medium flex items-center">
                 {/* Show different content based on loading state */}
                 {loading ? (
                   "Loading..."
@@ -162,7 +162,7 @@ const SubscriptionTracker: FC = () => {
                   <>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-1.5"
+                      className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-1.5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -184,7 +184,7 @@ const SubscriptionTracker: FC = () => {
                 )}
               </span>
               {/* Account balance display */}
-              <span className="text-light-100 text-base font-medium flex items-center">
+              <span className="text-light-100 text-sm sm:text-base font-medium flex items-center">
                 {/* Show different content based on loading state */}
                 {loading ? (
                   "Loading..."
@@ -194,7 +194,7 @@ const SubscriptionTracker: FC = () => {
                   <>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-1.5"
+                      className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-1.5"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -217,11 +217,11 @@ const SubscriptionTracker: FC = () => {
             </div>
           </div>
           {/* Main content area with Sidebar and Tab Content */}
-          <div className="flex flex-1 overflow-hidden mt-2">
+          <div className="flex flex-1 overflow-hidden mt-1 sm:mt-2">
             {/* Sidebar navigation */}
             <Sidebar activePage={activeTab} onTabChange={handleTabChange} />
             {/* Tab content container */}
-            <div className="flex-1 overflow-y-auto pr-2">
+            <div className="flex-1 overflow-y-auto pr-1 sm:pr-2">
               {/* Display active tab content */}
               {renderTabContent()}
             </div>

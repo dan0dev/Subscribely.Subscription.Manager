@@ -83,14 +83,14 @@ const SubscriptionTab: FC = () => {
   };
 
   return (
-    <div className="flex-1 overflow-hidden border-light-600/20 bg-dark-400/50">
+    <div className="flex-1 overflow-hidden border-light-600/20 bg-dark-400/50 rounded-lg">
       <SubscriptionHeader subscriptionsCount={subscriptions.length} />
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto px-2 sm:px-4">
         {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <RefreshCw className="w-8 h-8 text-primary-100 animate-spin" />
-            <span className="ml-3 text-light-400">Loading subscription data...</span>
+          <div className="flex flex-col sm:flex-row justify-center items-center h-40 sm:h-64 gap-2 sm:gap-0">
+            <RefreshCw className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-primary-100 animate-spin" />
+            <span className="sm:ml-3 text-sm sm:text-base text-light-400">Loading subscription data...</span>
           </div>
         ) : subscriptions.length > 0 ? (
           <SubscriptionTable
