@@ -16,8 +16,8 @@ export const metadata: Metadata = {
   description: "Subscription Manager",
   metadataBase: new URL("https://subscribely-subscription-manager.vercel.app/"),
   openGraph: {
-    title: "Subscribely",
-    description: "Subscription Manager",
+    title: "Subscribely Official Website",
+    description: "Subscription Manager - Track and manage your subscriptions effortlessly.",
     url: "https://subscribely-subscription-manager.vercel.app/",
     siteName: "Subscribely",
     images: ["/og-image.png"],
