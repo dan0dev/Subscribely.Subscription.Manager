@@ -24,10 +24,11 @@ const getCspHeader = () => {
       "'unsafe-inline'",
     ],
 
-    // Image sources
+    // Image sources - Allow any HTTPS source to prevent blocking OG crawlers
     "img-src": [
       "'self'",
       "data:", // Base64 encoded images
+      "https:", // Allow all HTTPS images for OG crawlers
       "https://via.placeholder.com", // Placeholder images
     ],
 
@@ -50,7 +51,7 @@ const getCspHeader = () => {
     // Web workers
     "worker-src": ["'self'", "blob:"],
 
-    // Embedding in frames
+    // Embedding in frames - Allow same origin for better compatibility
     "frame-src": ["'self'"],
 
     // Block all objects/embeds
@@ -59,8 +60,8 @@ const getCspHeader = () => {
     // Form submission
     "form-action": ["'self'"],
 
-    // Block iframe embedding of our site
-    "frame-ancestors": ["'none'"],
+    // Don't block iframe embedding by crawlers - remove this restriction
+    // "frame-ancestors": ["'none'"], // Commented out to allow OG crawlers
 
     // Force HTTPS (only in production)
     ...(process.env.NODE_ENV === "production" ? { "upgrade-insecure-requests": [] } : {}),
@@ -96,8 +97,8 @@ const nextConfig = {
   images: {
     formats: ["image/webp"],
     contentDispositionType: "attachment",
-    // CSP for Next.js image optimization (separate from main CSP)
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Relaxed CSP for Next.js image optimization
+    contentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data: https:;",
   },
 
   // URL redirects
@@ -128,9 +129,9 @@ const nextConfig = {
             value: "nosniff",
           },
           {
-            // Block iframe embedding
+            // Allow iframe embedding for OG crawlers - use SAMEORIGIN instead of DENY
             key: "X-Frame-Options",
-            value: "DENY",
+            value: "SAMEORIGIN",
           },
           {
             // Enable XSS protection (legacy)

@@ -8,7 +8,7 @@ import arcjet, { detectBot, shield, tokenBucket } from "@arcjet/next";
 
 const publicPaths = ["/sign-in", "/sign-up"];
 
-// Arcjet
+// Arcjet - Updated to allow OpenGraph crawlers
 const aj = arcjet({
   key: process.env.ARCJET_KEY!,
   characteristics: ["ip.src"],
@@ -16,7 +16,25 @@ const aj = arcjet({
     shield({ mode: "LIVE" }),
     detectBot({
       mode: "LIVE",
-      allow: ["CATEGORY:SEARCH_ENGINE"],
+      allow: [
+        // Search engines
+        "CATEGORY:SEARCH_ENGINE",
+
+        // OpenGraph/Social Media Crawlers
+        "FACEBOOK_CRAWLER",
+        "FACEBOOK_CRAWLER",
+        "TWITTER_CRAWLER",
+        "LINKEDIN_CRAWLER",
+        "DISCORD_CRAWLER",
+        "SLACK_CRAWLER",
+        "TELEGRAM_CRAWLER",
+        "WHATSAPP_CRAWLER",
+        "PINTREST_CRAWLER",
+        "REDDIT_CRAWLER",
+
+        // Meta (Facebook) specific crawlers
+        "FACEBOOK_CRAWLER",
+      ],
     }),
     tokenBucket({
       mode: "LIVE",
@@ -28,6 +46,26 @@ const aj = arcjet({
 });
 
 export async function middleware(request: NextRequest) {
+  // Skip Arcjet for static assets and OpenGraph images
+  const pathname = request.nextUrl.pathname;
+
+  // Don't apply Arcjet to these paths
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/favicon") ||
+    pathname.startsWith("/og-image") ||
+    pathname.startsWith("/twitter-image") ||
+    pathname.startsWith("/apple-touch-icon") ||
+    pathname.endsWith(".png") ||
+    pathname.endsWith(".jpg") ||
+    pathname.endsWith(".jpeg") ||
+    pathname.endsWith(".svg") ||
+    pathname.endsWith(".ico") ||
+    pathname.endsWith(".webp")
+  ) {
+    return NextResponse.next();
+  }
+
   // 1. Arcjet
   const decision = await aj.protect(request, { requested: 1 });
 
@@ -69,7 +107,9 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// exceptions for api routes and static files
+// Updated matcher to exclude image files
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.svg|.*\\.ico|.*\\.webp).*)",
+  ],
 };
