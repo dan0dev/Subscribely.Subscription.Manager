@@ -109,5 +109,7 @@ export async function middleware(request: NextRequest) {
 
 // Updated matcher to exclude image files
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\.(png|jpg|jpeg|svg|ico|webp)$).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.svg|.*\\.ico|.*\\.webp).*)",
+  ],
 };
