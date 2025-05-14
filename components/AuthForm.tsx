@@ -155,7 +155,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
                 <FormField
                   control={form.control}
                   name="name"
-                  label={<span>Usernames</span>}
+                  label={<span>Username</span>}
                   placeholder="john_doe"
                   disabled={isLoading}
                 />
