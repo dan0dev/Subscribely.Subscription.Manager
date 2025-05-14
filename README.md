@@ -2,7 +2,7 @@
 
 <div align="center">
   
-![Subscribely Logo](https://i.imgur.com/hicXmxC.png)
+[![Subscribely Logo](https://i.imgur.com/hicXmxC.png)](https://subscribely-subscription-manager.vercel.app/)
 
 </div>
 
@@ -15,12 +15,23 @@
 
 </div>
 
-## Overview
+## 📄 Overview
 Subscribely is a creative project built to demonstrate a modern subscription management platform. This project has been in development for 2 months and serves as a showcase for implementing a comprehensive subscription system with role-based access controls.
 
 **Note:** This is not a real-world application solving an actual business problem, but rather a creative project demonstrating various technical implementations and solutions.
 
-## Features
+<p align="center">
+  <video src="https://github.com/user-attachments/assets/9728b920-35e8-46d1-9edb-a28fad3b4d1b" width="100%" />
+</p>
+
+## ✨ Showcase
+
+| ![Image 1](https://github.com/user-attachments/assets/9e557f57-79a8-4ea7-9918-1b8cd3177d71) | ![Image 2](https://github.com/user-attachments/assets/f8aec892-249c-4561-9019-58116fd76c16) |
+|--------------------------------|--------------------------------|
+| ![Image 3](https://github.com/user-attachments/assets/6623ef73-e7e2-4f1f-a247-2500cf7ffbe8) | ![Image 4](https://github.com/user-attachments/assets/5bf05861-b21a-430d-bdd0-d2894664aa58) |
+
+
+## 🔧 Features
 
 ### Authentication
 - User registration and login system
@@ -49,7 +60,7 @@ Subscribely is a creative project built to demonstrate a modern subscription man
   - Subscription cancellation
   - Admin-initiated subscription revocation
 
-## Tech Stack
+## 📐 Tech Stack
 - **Framework**: Next.js 15 with TypeScript
 - **Styling**: Tailwind CSS
 - **Database**: MongoDB with Mongoose
@@ -61,7 +72,7 @@ Subscribely is a creative project built to demonstrate a modern subscription man
 - **Security**: Arcjet
 - **Deployment**: Vercel
 
-## Project Structure
+## 🗂️ Project Structure
 The project follows a standard Next.js App Router structure with server actions and API routes.
 
 ```
@@ -97,14 +108,14 @@ The project follows a standard Next.js App Router structure with server actions 
 └── tsconfig.json
 ```
 
-## Development Practices
+## 🌐 Development Practices
 - Strongly typed with TypeScript
 - Conventional commits for clear version history
 - Git workflow configured with Husky and lint-staged
 - Comprehensive ESLint and Prettier configuration
 - Well-documented codebase with JSDoc comments
 
-## Installation
+## 📥 Installation
 
 ```bash
 # Clone the repository
@@ -117,7 +128,7 @@ npm install
 npm run dev
 ```
 
-## Environment Variables
+## 🌳 Environment Variables
 Create a `.env.local` file in the root directory and add the following:
 
 ```
@@ -129,16 +140,16 @@ NEXT_PUBLIC_SENTRY_DSN=
 ARCJET_API_KEY=
 ```
 
-## Deployment
+## 💻 Deployment
 The application is deployed on Vercel.
 
-## Todo
+## 📝 Todo
 - Creating test role as account
 - Implement automatic subscription expiration (currently subscriptions don't expire automatically)
 - Add subscription renewal options
 - Actual working account deletion
 - Refund option
 
-## License
+## 📃 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
