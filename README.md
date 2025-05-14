@@ -129,15 +129,19 @@ npm run dev
 ```
 
 ## 🌳 Environment Variables
-Create a `.env.local` file in the root directory and add the following:
+Modify the `.env.local` file with your own variables data with the following:
 
 ```
 MONGODB_URI=
+
 JWT_SECRET=
-EMAIL_USER=
-EMAIL_PASS=
-NEXT_PUBLIC_SENTRY_DSN=
-ARCJET_API_KEY=
+JWT_EXPIRES_IN=
+
+GMAIL_USER=
+GMAIL_PASSWORD=
+
+ARCJET_KEY=
+SENTRY_AUTH_TOKEN=
 ```
 
 ## 💻 Deployment
