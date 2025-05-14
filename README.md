@@ -154,6 +154,13 @@ The application is deployed on Vercel.
 - Actual working account deletion
 - Refund option
 
+## 🤝 Contributing
+
+Subscribely is an open-source project, and we welcome contributions of all kinds from the community! If you're interested in helping out, have ideas, or found a bug, please read our [Contributing Guidelines (CONTRIBUTING.md)](CONTRIBUTING.md) for details.
+
+We use [GitHub Issues](https://github.com/dan0dev/Subscribely.Subscription.Manager/issues) for tracking bugs and feature requests.
+
+
 ## 📃 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
