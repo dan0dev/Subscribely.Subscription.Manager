@@ -41,7 +41,13 @@ const getCspHeader = () => {
     // API and WebSocket connections
     "connect-src": [
       "'self'",
-      // Sentry error reporting (update with your actual Sentry DSN)
+      // Docker development additions
+      "http://localhost:*",
+      "http://127.0.0.1:*",
+      "http://0.0.0.0:*",
+      "ws://localhost:*",
+      "ws://0.0.0.0:*",
+      // Sentry error reporting
       "https://o4509210060587008.ingest.de.sentry.io",
       // Arcjet security service
       "https://api.arcjet.com",
@@ -109,6 +115,21 @@ const nextConfig = {
         destination: "/sign-in",
       },
     ];
+  },
+
+  // Explicitly set server configuration
+  server: {
+    port: 3000,
+    hostname: "0.0.0.0",
+  },
+
+  // Required for webpack watcher in Docker
+  webpack: (config: import("webpack").Configuration): import("webpack").Configuration => {
+    config.watchOptions = {
+      poll: 1000,
+      aggregateTimeout: 300,
+    };
+    return config;
   },
 
   // HTTP headers for all responses
