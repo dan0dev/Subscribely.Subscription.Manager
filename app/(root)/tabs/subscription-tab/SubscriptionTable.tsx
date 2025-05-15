@@ -86,10 +86,10 @@ const SubscriptionTable: FC<SubscriptionTableProps> = ({
 
   return (
     <div className="overflow-x-auto">
-      <Table className="border-collapse w-full min-w-[650px]">
+      <Table className="border-collapse w-full min-w-full">
         <TableHeader>
           <TableRow className="bg-dark-300/70 border-b border-light-600/20">
-            <TableHead className="text-light-100 w-14 sm:w-20 font-medium text-xs sm:text-sm">#</TableHead>
+            <TableHead className="text-light-100 w-10 sm:w-14 font-medium text-xs sm:text-sm">#</TableHead>
             <TableHead className="text-light-100 font-medium text-xs sm:text-sm">Subscription</TableHead>
             <TableHead className="text-light-100 font-medium text-xs sm:text-sm">Price</TableHead>
             <TableHead className="text-light-100 font-medium text-xs sm:text-sm">Renewal Date</TableHead>
