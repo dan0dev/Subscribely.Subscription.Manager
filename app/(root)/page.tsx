@@ -138,7 +138,7 @@ const SubscriptionTracker: FC = () => {
 
   return (
     <div className="min-h-screen px-4 py-6 sm:p-8 md:p-10 pb-28 md:pb-10 flex items-center justify-center bg-dark-500">
-      <div className="card-border w-full max-w-5xl h-[calc(100vh-4rem)] sm:h-[calc(80vh-4rem)] md:h-[calc(70vh-4rem)] lg:h-[calc(60vh-4rem)]">
+      <div className="card-border w-full max-w-5xl min-h-[500px] max-h-[800px] h-[min(calc(100vh-4rem),900px)] sm:h-[min(calc(80vh-4rem),800px)] md:h-[min(calc(70vh-4rem),700px)] lg:h-[min(calc(60vh-4rem),700px)] border-3 border-red-500">
         <div className="card p-3 sm:p-5 md:p-7 h-full flex flex-col">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-7 border-b border-light-600/20 pb-3 sm:pb-5 gap-3 sm:gap-0">
             {/* Sign Out button */}
