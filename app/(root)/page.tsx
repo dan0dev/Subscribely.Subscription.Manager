@@ -20,6 +20,9 @@ const SubscriptionTracker: FC = () => {
   // Loading state
   const [loading, setLoading] = useState(true);
 
+  //logout loading state
+  const [logoutLoading, setLogoutLoading] = useState(false);
+
   // Error message storage
   const [error, setError] = useState<string | null>(null);
 
@@ -91,11 +94,13 @@ const SubscriptionTracker: FC = () => {
     setLastUpdated(Date.now());
   };
 
+
   /**
    * Handle user logout
    */
   const handleSignOut = async () => {
     try {
+      setLogoutLoading(true);
       const response = await fetch("/api/auth/logout", {
         method: "POST",
       });
@@ -107,6 +112,8 @@ const SubscriptionTracker: FC = () => {
       }
     } catch (error) {
       console.error("Error signing out:", error);
+    }finally{
+      setLogoutLoading(false);
     }
   };
 
@@ -144,12 +151,39 @@ const SubscriptionTracker: FC = () => {
             {/* Sign Out button */}
             <button
               onClick={handleSignOut}
-              className="flex items-center text-light-100 text-sm sm:text-base font-medium cursor-pointer"
+              className="flex items-center text-light-100 text-sm sm:text-base font-medium cursor-pointer hover:bg-light-600/20 rounded-md px-2 py-1 "
               aria-label="Sign Out"
+              disabled={logoutLoading}
             >
-              <LogOut size={20} className="mr-2 sm:mr-3" /> {/* Sign out icon */}
-              <span className="text-sm sm:text-base font-medium">Sign Out</span>
+             { /*loader for logout so user does not have to press it multiple times */}
+              {logoutLoading ? (
+                <>
+                  <svg
+                    className="animate-spin mr-2 h-5 w-5 text-light-100"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                  </svg>
+                  Signing Out...
+                </>
+              ) : (
+                <>
+                  <LogOut size={20} className="mr-2 sm:mr-3" />
+                  <span className="text-sm sm:text-base font-medium">Sign Out</span>
+                </>
+              )}
             </button>
+
             {/* User information display (Name and Account Money) */}
             <div className="flex space-x-3 w-full sm:w-auto justify-end">
               <span className="text-light-100 text-sm sm:text-base font-medium flex items-center">
