@@ -20,9 +20,6 @@ const SubscriptionTracker: FC = () => {
   // Loading state
   const [loading, setLoading] = useState(true);
 
-  //logout loading state
-  const [logoutLoading, setLogoutLoading] = useState(false);
-
   // Error message storage
   const [error, setError] = useState<string | null>(null);
 
@@ -31,6 +28,9 @@ const SubscriptionTracker: FC = () => {
 
   // Timestamp used to trigger data refresh
   const [lastUpdated, setLastUpdated] = useState<number>(Date.now());
+
+  //logout loading state
+  const [logoutLoading, setLogoutLoading] = useState(false);
 
   /**
    * Fetch user data when component mounts or lastUpdated changes
@@ -155,6 +155,7 @@ const SubscriptionTracker: FC = () => {
               aria-label="Sign Out"
               disabled={logoutLoading}
             >
+             {/* loader for logout */}
               {logoutLoading ? (
                 <>
                   <svg
