@@ -155,7 +155,6 @@ const SubscriptionTracker: FC = () => {
               aria-label="Sign Out"
               disabled={logoutLoading}
             >
-             { /*loader for logout */}
               {logoutLoading ? (
                 <>
                   <svg
