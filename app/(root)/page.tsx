@@ -29,7 +29,7 @@ const SubscriptionTracker: FC = () => {
   // Timestamp used to trigger data refresh
   const [lastUpdated, setLastUpdated] = useState<number>(Date.now());
 
-  //logout loading state
+  // Logout loading state
   const [logoutLoading, setLogoutLoading] = useState(false);
 
   /**
@@ -155,7 +155,7 @@ const SubscriptionTracker: FC = () => {
               aria-label="Sign Out"
               disabled={logoutLoading}
             >
-             {/* loader for logout */}
+             {/* Loader for logout */}
               {logoutLoading ? (
                 <>
                   <svg
