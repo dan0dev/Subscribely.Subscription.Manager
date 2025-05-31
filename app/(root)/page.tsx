@@ -29,7 +29,7 @@ const SubscriptionTracker: FC = () => {
   // Timestamp used to trigger data refresh
   const [lastUpdated, setLastUpdated] = useState<number>(Date.now());
 
-  //logout loading state
+  // Logout loading state
   const [logoutLoading, setLogoutLoading] = useState(false);
 
   /**
