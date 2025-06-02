@@ -1,4 +1,3 @@
-import { JWT_EXPIRES_IN } from "@/config/env";
 import connectDB from "@/lib/db";
 import User from "@/lib/models/user";
 import * as jwt from "jsonwebtoken";
@@ -45,7 +44,9 @@ export async function POST(request: NextRequest): Promise<Response> {
         throw new Error("JWT_SECRET is not defined");
       }
 
-      const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN || "2d" });
+      const token = jwt.sign({ id: user._id }, JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN || "2d",
+      });
 
       // Create response
       const response = NextResponse.json({
