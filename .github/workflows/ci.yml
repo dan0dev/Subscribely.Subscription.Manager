@@ -42,8 +42,8 @@ jobs:
 
       # 5. lépés: Build futtatása
       - name: Run build
+        if: github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'push'
         run: npm run build
-        # Ha a buildhez környezeti változók kellenek, itt kell beállítani őket
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
